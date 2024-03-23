@@ -103,12 +103,24 @@ function SearchForm({ ports }) {
         <Row className="mt-3">
           <Col md={formData.tripType === "roundTrip" ? 6 : 12}>
             {prices.length > 0 && (
-              <PriceCalendar date={formData.date} prices={prices} />
+              <PriceCalendar
+                date={formData.date}
+                prices={prices}
+                departurePort={formData.departurePort}
+                arrivalPort={formData.arrivalPort}
+                isReturnTrip={false}
+              />
             )}
           </Col>
           {formData.tripType === "roundTrip" && returnPrices.length > 0 && (
             <Col md={6}>
-              <PriceCalendar date={formData.date} prices={returnPrices} />
+              <PriceCalendar
+                date={formData.date}
+                prices={returnPrices}
+                departurePort={formData.arrivalPort} // Dönüş için varış noktası gidişin başlangıç noktası olur
+                arrivalPort={formData.departurePort} // Dönüş için başlangıç noktası gidişin varış noktası olur
+                isReturnTrip={true}
+              />
             </Col>
           )}
         </Row>

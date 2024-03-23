@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./PriceCalendar.css";
+import FlightRoute from "./FlightRoute"; // FlightRoute bileşenini import et
+import TicketCard from "./TicketCard"; // TicketCard bileşenini import et
 
-function PriceCalendar({ date, prices }) {
+function PriceCalendar({
+  date,
+  prices,
+  departurePort,
+  arrivalPort,
+  isReturnTrip,
+}) {
+  const [selectedDayData, setSelectedDayData] = useState(null);
+
   const priceDays = prices.filter((p) => p.totalAmount);
   const cheapestPrice = priceDays.reduce(
     (min, p) => (p.totalAmount < min ? p.totalAmount : min),
@@ -15,13 +25,18 @@ function PriceCalendar({ date, prices }) {
   );
 
   const priceRange = highestPrice - cheapestPrice;
-  const colorStep = priceRange / 3; // Üç renk gradyanı için adım sayısı
+  const colorStep = priceRange / 3;
 
   const findDayData = (calendarDate) =>
     priceDays.find((price) => {
       const priceDate = new Date(price.date.split(".").reverse().join("-"));
       return priceDate.toDateString() === calendarDate.toDateString();
     });
+
+  const handleDayClick = (calendarDate) => {
+    const dayData = findDayData(calendarDate);
+    setSelectedDayData(dayData);
+  };
 
   const tileClassName = ({ date: calendarDate, view }) => {
     if (view !== "month") {
@@ -34,11 +49,11 @@ function PriceCalendar({ date, prices }) {
     }
 
     if (dayData.totalAmount === cheapestPrice) {
-      return "price-cheapest"; // En düşük fiyat için
+      return "price-cheapest";
     }
 
     const priceDifference = dayData.totalAmount - cheapestPrice;
-    const colorIndex = Math.min(Math.floor(priceDifference / colorStep), 2); // 0 ile 2 arasında bir değer alır
+    const colorIndex = Math.min(Math.floor(priceDifference / colorStep), 2);
     return `price-color-${colorIndex}`;
   };
 
@@ -51,13 +66,13 @@ function PriceCalendar({ date, prices }) {
     if (dayData) {
       let priceClass = "";
       if (dayData.totalAmount === cheapestPrice) {
-        priceClass = "price-cheapest"; // En düşük fiyat için ayrı bir renk
+        priceClass = "price-cheapest";
       } else {
         const priceDifference = dayData.totalAmount - cheapestPrice;
         const colorIndex = Math.min(
           Math.floor(priceDifference / (colorStep + 1)),
           2
-        ); // 0 ile 2 arasında bir değer alır
+        );
         priceClass = `price-color-${colorIndex}`;
       }
 
@@ -74,14 +89,20 @@ function PriceCalendar({ date, prices }) {
 
   return (
     <div className="mt-3">
-      <h2>Aylık En Düşük Fiyatlar</h2>
+      <FlightRoute
+        departureCountry={isReturnTrip ? arrivalPort : departurePort}
+        destinationCountry={isReturnTrip ? departurePort : arrivalPort}
+        isReturnTrip={isReturnTrip}
+      />
       <Calendar
         value={date}
         tileClassName={tileClassName}
         tileContent={tileContent}
+        onClickDay={handleDayClick}
         view="month"
         locale="tr-TR"
       />
+      {selectedDayData && <TicketCard {...selectedDayData} />}
     </div>
   );
 }
