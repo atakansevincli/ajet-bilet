@@ -1,0 +1,42 @@
+.react-calendar {
+  width: 100%; /* Takvimin genişliğini artır */
+  font-size: 24px; /* Takvimin genel font boyutunu artır */
+  border-collapse: separate;
+  border-spacing: 2px; /* Tarihler arasında boşluk oluştur */
+}
+
+.react-calendar__tile {
+  border: 1px solid #ddd; /* Tarihler arasında gri çizgi */
+}
+.tileDisabled {
+  opacity: 0.5; /* Müsait olmayan günler için soluk görünüm */
+}
+
+.tileContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px; /* Tile içeriğinin font boyutunu ayarla */
+}
+
+.react-calendar__tile.cheapest {
+  color: green; /* Metin rengi beyaz */
+  font-weight: bold; /* Yazıyı kalınlaştır */
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: black;
+}
+
+.react-calendar__tile:hover {
+  background-color: #f0f0f0; /* Tüm tarihler için hover stilini ayarla */
+}
+
+.react-calendar__tile--active {
+  background-color: white; /* Seçili tarih için arka plan */
+  color: black;
+}
+
+.react-calendar__tile--active:hover {
+  background-color: #e9e9e9; /* Seçili tarih için hover durumunda arka plan */
+}
