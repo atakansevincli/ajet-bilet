@@ -13,29 +13,25 @@ function PriceCalendar({
   isReturnTrip,
 }) {
   const [selectedDayData, setSelectedDayData] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(date);
 
   const priceDays = prices.filter((p) => p.totalAmount);
   const cheapestPrice = priceDays.reduce(
     (min, p) => (p.totalAmount < min ? p.totalAmount : min),
     Infinity
   );
-  const highestPrice = priceDays.reduce(
-    (max, p) => (p.totalAmount > max ? p.totalAmount : max),
-    -Infinity
-  );
 
-  const priceRange = highestPrice - cheapestPrice;
-  const colorStep = priceRange / 3;
-
-  const findDayData = (calendarDate) =>
-    priceDays.find((price) => {
+  const findDayData = (calendarDate) => {
+    return priceDays.find((price) => {
       const priceDate = new Date(price.date.split(".").reverse().join("-"));
       return priceDate.toDateString() === calendarDate.toDateString();
     });
+  };
 
   const handleDayClick = (calendarDate) => {
     const dayData = findDayData(calendarDate);
     setSelectedDayData(dayData);
+    setSelectedDate(calendarDate); // Güncellenen tarihi ayarla
   };
 
   const tileClassName = ({ date: calendarDate, view }) => {
@@ -43,18 +39,30 @@ function PriceCalendar({
       return "";
     }
 
+    let classes = [];
     const dayData = findDayData(calendarDate);
-    if (!dayData) {
-      return "";
+
+    if (dayData && dayData.totalAmount === cheapestPrice) {
+      classes.push("price-cheapest");
     }
 
-    if (dayData.totalAmount === cheapestPrice) {
-      return "price-cheapest";
+    if (dayData) {
+      const priceDifference = dayData.totalAmount - cheapestPrice;
+      const colorIndex = Math.min(
+        Math.floor(priceDifference / (cheapestPrice / 3)),
+        2
+      );
+      classes.push(`price-color-${colorIndex}`);
     }
 
-    const priceDifference = dayData.totalAmount - cheapestPrice;
-    const colorIndex = Math.min(Math.floor(priceDifference / colorStep), 2);
-    return `price-color-${colorIndex}`;
+    if (
+      selectedDate &&
+      calendarDate.toDateString() === selectedDate.toDateString()
+    ) {
+      classes.push("selected-day");
+    }
+
+    return classes.join(" ");
   };
 
   const tileContent = ({ date: calendarDate, view }) => {
@@ -70,7 +78,7 @@ function PriceCalendar({
       } else {
         const priceDifference = dayData.totalAmount - cheapestPrice;
         const colorIndex = Math.min(
-          Math.floor(priceDifference / (colorStep + 1)),
+          Math.floor(priceDifference / (cheapestPrice / 3)),
           2
         );
         priceClass = `price-color-${colorIndex}`;
@@ -95,7 +103,7 @@ function PriceCalendar({
         isReturnTrip={isReturnTrip}
       />
       <Calendar
-        value={date}
+        value={selectedDate}
         tileClassName={tileClassName}
         tileContent={tileContent}
         onClickDay={handleDayClick}

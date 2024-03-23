@@ -59,3 +59,7 @@
   color: rgb(154, 12, 12); /* Orta fiyat aralığı için bir renk */
   font-weight: normal;
 }
+
+.react-calendar__tile.selected-day {
+  background-color: #0d6efd; /* Tıklanan gün için kalıcı arka plan rengi */
+}
