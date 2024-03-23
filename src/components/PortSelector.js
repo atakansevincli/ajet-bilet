@@ -30,17 +30,30 @@ function PortSelector({
   return (
     <Form.Group controlId={id}>
       <Form.Label>{label}</Form.Label>
-      <Typeahead
-        id={id}
-        labelKey={(option) =>
-          `${option.cityName} (${option.code}) - ${option.portName}`
-        }
-        onChange={handlePortSelection}
-        options={ports}
-        placeholder={`Select ${label}`}
-        selected={ports.filter((port) => port.code === formData[`${type}Port`])}
-        clearButton
-      />
+      <div className="input-group">
+        <div className="input-group-prepend">
+          <span className="input-group-text">
+            {type === "departure" ? (
+              <i className="material-icons-round">flight_takeoff</i>
+            ) : (
+              <i className="material-icons-round">flight_land</i>
+            )}
+          </span>
+        </div>
+        <Typeahead
+          id={id}
+          labelKey={(option) =>
+            `${option.cityName} (${option.code}) - ${option.portName}`
+          }
+          onChange={handlePortSelection}
+          options={ports}
+          placeholder="Seçiniz"
+          selected={ports.filter(
+            (port) => port.code === formData[`${type}Port`]
+          )}
+          clearButton
+        />
+      </div>
     </Form.Group>
   );
 }

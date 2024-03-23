@@ -19,11 +19,6 @@
   font-size: 18px; /* Tile içeriğinin font boyutunu ayarla */
 }
 
-.react-calendar__tile.cheapest {
-  color: green; /* Metin rengi beyaz */
-  font-weight: bold; /* Yazıyı kalınlaştır */
-}
-
 .react-calendar__month-view__days__day--weekend {
   color: black;
 }
@@ -39,4 +34,28 @@
 
 .react-calendar__tile--active:hover {
   background-color: #e9e9e9; /* Seçili tarih için hover durumunda arka plan */
+}
+
+.react-calendar__tile {
+  font-weight: bold; /* Tüm takvim hücreleri için yazı tipi ağırlığını bold yap */
+}
+
+.tileContent.price-cheapest {
+  color: rgb(11, 167, 52); /* En düşük fiyat için özel bir renk */
+  font-weight: bold; /* Tüm takvim hücreleri için yazı tipi ağırlığını bold yap */
+}
+
+.tileContent.price-color-0 {
+  color: rgb(255, 148, 26); /* İkinci en düşük fiyat aralığı için bir renk */
+  font-weight: normal;
+}
+
+.tileContent.price-color-1 {
+  color: red; /* En yüksek fiyat aralığı için bir renk */
+  font-weight: normal;
+}
+
+.tileContent.price-color-2 {
+  color: rgb(154, 12, 12); /* Orta fiyat aralığı için bir renk */
+  font-weight: normal;
 }

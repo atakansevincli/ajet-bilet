@@ -9,6 +9,13 @@ function PriceCalendar({ date, prices }) {
     (min, p) => (p.totalAmount < min ? p.totalAmount : min),
     Infinity
   );
+  const highestPrice = priceDays.reduce(
+    (max, p) => (p.totalAmount > max ? p.totalAmount : max),
+    -Infinity
+  );
+
+  const priceRange = highestPrice - cheapestPrice;
+  const colorStep = priceRange / 3; // Üç renk gradyanı için adım sayısı
 
   const findDayData = (calendarDate) =>
     priceDays.find((price) => {
@@ -17,28 +24,47 @@ function PriceCalendar({ date, prices }) {
     });
 
   const tileClassName = ({ date: calendarDate, view }) => {
-    const dayData = findDayData(calendarDate);
-    if (view === "month" && dayData) {
-      if (dayData.totalAmount === cheapestPrice) {
-        return "cheapest"; // En düşük fiyat için 'cheapest' CSS sınıfını kullan
-      }
+    if (view !== "month") {
+      return "";
     }
-    return "";
+
+    const dayData = findDayData(calendarDate);
+    if (!dayData) {
+      return "";
+    }
+
+    if (dayData.totalAmount === cheapestPrice) {
+      return "price-cheapest"; // En düşük fiyat için
+    }
+
+    const priceDifference = dayData.totalAmount - cheapestPrice;
+    const colorIndex = Math.min(Math.floor(priceDifference / colorStep), 2); // 0 ile 2 arasında bir değer alır
+    return `price-color-${colorIndex}`;
   };
 
   const tileContent = ({ date: calendarDate, view }) => {
-    if (view !== "month") return null;
+    if (view !== "month") {
+      return null;
+    }
 
     const dayData = findDayData(calendarDate);
     if (dayData) {
+      let priceClass = "";
+      if (dayData.totalAmount === cheapestPrice) {
+        priceClass = "price-cheapest"; // En düşük fiyat için ayrı bir renk
+      } else {
+        const priceDifference = dayData.totalAmount - cheapestPrice;
+        const colorIndex = Math.min(
+          Math.floor(priceDifference / (colorStep + 1)),
+          2
+        ); // 0 ile 2 arasında bir değer alır
+        priceClass = `price-color-${colorIndex}`;
+      }
+
       return (
-        <div
-          className={`tileContent ${
-            dayData.totalAmount === cheapestPrice ? "cheapest" : ""
-          }`}
-        >
+        <div className={`tileContent ${priceClass}`}>
           <small>
-            {dayData.totalAmount} {dayData.currency || "TRY"}
+            {Math.trunc(dayData.totalAmount)} {dayData.currency || "₺"}
           </small>
         </div>
       );

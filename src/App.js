@@ -9,7 +9,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-calendar/dist/Calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
-
 function App() {
   const [ports, setPorts] = useState([]);
   const [searchForms, setSearchForms] = useState([]);

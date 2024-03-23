@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Form, Row, Col, Button } from "react-bootstrap";
+import { Form, Row, Col } from "react-bootstrap";
 import PortSelector from "./PortSelector";
-import DatePicker from "react-datepicker";
+import TripTypeSelector from "./TripTypeSelector";
+import DatePickerComponent from "./DatePickerComponent";
+import SubmitButton from "./SubmitButton";
+import { fetchPrices } from "../services/portService";
 import PriceCalendar from "./PriceCalendar";
 import LoadingSpinner from "./LoadingSpinner";
-import { fetchPrices } from "../services/portService";
 
 function SearchForm({ ports }) {
   const [formData, setFormData] = useState({
@@ -13,12 +15,11 @@ function SearchForm({ ports }) {
     date: new Date(),
     tripType: "oneWay",
   });
+  const [loading, setLoading] = useState(false);
   const [prices, setPrices] = useState([]);
   const [returnPrices, setReturnPrices] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const handleDateChange = (date) => setFormData({ ...formData, date });
-
   const handleTripTypeChange = (e) =>
     setFormData({ ...formData, tripType: e.target.value });
 
@@ -56,36 +57,17 @@ function SearchForm({ ports }) {
       <Form onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Col>
-            <Form.Label>Yolculuk Tipi</Form.Label>
-            <div>
-              <Form.Check
-                inline
-                label="Tek Yön"
-                name="tripType"
-                type="radio"
-                id="oneWay"
-                value="oneWay"
-                checked={formData.tripType === "oneWay"}
-                onChange={handleTripTypeChange}
-              />
-              <Form.Check
-                inline
-                label="Gidiş Dönüş"
-                name="tripType"
-                type="radio"
-                id="roundTrip"
-                value="roundTrip"
-                checked={formData.tripType === "roundTrip"}
-                onChange={handleTripTypeChange}
-              />
-            </div>
+            <TripTypeSelector
+              tripType={formData.tripType}
+              onTripTypeChange={handleTripTypeChange}
+            />
           </Col>
         </Row>
         <Row>
           <Col>
             <PortSelector
               id="departurePort"
-              label="Kalkış Havaalanı"
+              label="Nereden"
               formData={formData}
               setFormData={setFormData}
               ports={ports}
@@ -95,7 +77,7 @@ function SearchForm({ ports }) {
           <Col>
             <PortSelector
               id="arrivalPort"
-              label="Varış Havaalanı"
+              label="Nereye"
               formData={formData}
               setFormData={setFormData}
               ports={ports}
@@ -103,25 +85,18 @@ function SearchForm({ ports }) {
             />
           </Col>
           <Col>
-            <Form.Group controlId="date">
-              <Form.Label>Tarih Seçimi</Form.Label>
-              <DatePicker
-                selected={formData.date}
-                onChange={handleDateChange}
-                dateFormat="MM/yyyy"
-                showMonthYearPicker
-              />
-            </Form.Group>
+            <DatePickerComponent
+              selectedDate={formData.date}
+              onDateChange={handleDateChange}
+            />
           </Col>
         </Row>
         <Row className="mt-3">
           <Col>
-            <Button variant="primary" type="submit">
-              Ara
-            </Button>
+            <SubmitButton onSubmit={handleSubmit} />
           </Col>
         </Row>
-      </Form>
+      </Form>{" "}
       {loading ? (
         <LoadingSpinner />
       ) : (
