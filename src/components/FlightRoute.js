@@ -1,3 +1,5 @@
+import "./DatePicker.css";
+
 function FlightRoute({ departureCountry, destinationCountry, isReturnTrip }) {
   const iconStyle = { fontSize: "32px" }; // İkonlar için ortak stil
   const flightIconRotation = isReturnTrip ? "rotate(270deg)" : "rotate(90deg)";

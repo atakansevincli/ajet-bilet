@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Row, Col } from "react-bootstrap";
+import { Form, Row, Col, Card } from "react-bootstrap";
 import PortSelector from "./PortSelector";
 import TripTypeSelector from "./TripTypeSelector";
 import DatePickerComponent from "./DatePickerComponent";
@@ -53,55 +53,53 @@ function SearchForm({ ports }) {
   };
 
   return (
-    <div>
-      <Form onSubmit={handleSubmit}>
-        <Row className="mb-3">
-          <Col>
-            <TripTypeSelector
-              tripType={formData.tripType}
-              onTripTypeChange={handleTripTypeChange}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <PortSelector
-              id="departurePort"
-              label="Nereden"
-              formData={formData}
-              setFormData={setFormData}
-              ports={ports}
-              type="departure"
-            />
-          </Col>
-          <Col>
-            <PortSelector
-              id="arrivalPort"
-              label="Nereye"
-              formData={formData}
-              setFormData={setFormData}
-              ports={ports}
-              type="arrival"
-            />
-          </Col>
-          <Col>
-            <DatePickerComponent
-              selectedDate={formData.date}
-              onDateChange={handleDateChange}
-            />
-          </Col>
-        </Row>
-        <Row className="mt-3">
-          <Col>
-            <SubmitButton onSubmit={handleSubmit} />
-          </Col>
-        </Row>
-      </Form>{" "}
+    <Card>
+      <Card.Header>
+        <TripTypeSelector
+          tripType={formData.tripType}
+          onTripTypeChange={handleTripTypeChange}
+        />
+      </Card.Header>
+      <Card.Body>
+        <Form onSubmit={handleSubmit}>
+          <Row className="mb-3">
+            <Col md={3} sm={12}>
+              <PortSelector
+                id="departurePort"
+                label="Nereden"
+                formData={formData}
+                setFormData={setFormData}
+                ports={ports}
+                type="departure"
+              />
+            </Col>
+            <Col md={3} sm={12}>
+              <PortSelector
+                id="arrivalPort"
+                label="Nereye"
+                formData={formData}
+                setFormData={setFormData}
+                ports={ports}
+                type="arrival"
+              />
+            </Col>
+            <Col md={3} sm={12}>
+              <DatePickerComponent
+                selectedDate={formData.date}
+                onDateChange={handleDateChange}
+              />
+            </Col>
+            <Col md={3} sm={12} className="d-flex align-items-end">
+              <SubmitButton onSubmit={handleSubmit} />
+            </Col>
+          </Row>
+        </Form>
+      </Card.Body>
       {loading ? (
         <LoadingSpinner />
       ) : (
         <Row className="mt-3">
-          <Col md={formData.tripType === "roundTrip" ? 6 : 12}>
+          <Col sm={12} md={formData.tripType === "roundTrip" ? 6 : 12}>
             {prices.length > 0 && (
               <PriceCalendar
                 date={formData.date}
@@ -113,19 +111,19 @@ function SearchForm({ ports }) {
             )}
           </Col>
           {formData.tripType === "roundTrip" && returnPrices.length > 0 && (
-            <Col md={6}>
+            <Col sm={12} md={6}>
               <PriceCalendar
                 date={formData.date}
                 prices={returnPrices}
-                departurePort={formData.arrivalPort} // Dönüş için varış noktası gidişin başlangıç noktası olur
-                arrivalPort={formData.departurePort} // Dönüş için başlangıç noktası gidişin varış noktası olur
+                departurePort={formData.arrivalPort}
+                arrivalPort={formData.departurePort}
                 isReturnTrip={true}
               />
             </Col>
           )}
         </Row>
       )}
-    </div>
+    </Card>
   );
 }
 

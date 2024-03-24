@@ -1,0 +1,66 @@
+/* DatePicker konteynerını özelleştir */
+.react-datepicker {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* DatePicker başlık kısmını özelleştir */
+.react-datepicker__header {
+  background-color: #f0f0f0;
+  border-bottom: none;
+}
+
+/* Seçili gün için özelleştirme */
+.react-datepicker__day--selected {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Ay ve yıl düşme menüsü için özelleştirme */
+.react-datepicker__month-read-view,
+.react-datepicker__year-read-view {
+  background-color: #e9ecef;
+}
+
+/* Ay ve yıl düşme menüsündeki seçenekler için özelleştirme */
+.react-datepicker__month-option,
+.react-datepicker__year-option {
+  color: #495057;
+}
+
+/* Navigasyon ikonları için özelleştirme */
+.react-datepicker__navigation-icon::before {
+  border-color: #007bff;
+}
+
+/* Bugünün tarihi için özelleştirme */
+.react-datepicker__day--today {
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* Icon ve DatePicker hizalaması için ek stil */
+.input-group {
+  display: flex;
+  align-items: center; /* İkon ve DatePicker'ı dikey olarak ortala */
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem; /* İkon için padding */
+}
+
+/* DatePicker wrapper ve input stilini ayarla */
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  height: 38px; /* input yüksekliğini ayarla */
+  border-radius: 0.25rem; /* Hafif yuvarlak kenarlar */
+  padding: 0; /* Padding değerini sıfırla */
+  width: 100%; /* Tam genişlik kullan */
+}

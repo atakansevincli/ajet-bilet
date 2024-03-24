@@ -97,20 +97,29 @@ function PriceCalendar({
 
   return (
     <div className="mt-3">
-      <FlightRoute
-        departureCountry={isReturnTrip ? arrivalPort : departurePort}
-        destinationCountry={isReturnTrip ? departurePort : arrivalPort}
-        isReturnTrip={isReturnTrip}
-      />
-      <Calendar
-        value={selectedDate}
-        tileClassName={tileClassName}
-        tileContent={tileContent}
-        onClickDay={handleDayClick}
-        view="month"
-        locale="tr-TR"
-      />
-      {selectedDayData && <TicketCard {...selectedDayData} />}
+      {departurePort && arrivalPort ? (
+        <>
+          <FlightRoute
+            departureCountry={departurePort}
+            destinationCountry={arrivalPort}
+            isReturnTrip={isReturnTrip}
+          />
+          <Calendar
+            value={selectedDate}
+            tileClassName={tileClassName}
+            tileContent={tileContent}
+            onClickDay={handleDayClick}
+            view="month"
+            locale="tr-TR"
+          />
+          {selectedDayData && <TicketCard {...selectedDayData} />}
+        </>
+      ) : (
+        <p>
+          Please select departure and arrival ports to view the calendar and
+          ticket information.
+        </p>
+      )}
     </div>
   );
 }
